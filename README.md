@@ -6,6 +6,7 @@ The roles will install clone of current master of the CASino app from https://gi
 
 ## Usage
 
+```
 - roles:
     - role: casino
       casino_port: "{{ casino_port }}"
@@ -13,6 +14,7 @@ The roles will install clone of current master of the CASino app from https://gi
       casino_ldap_port: "{{ ldaps_port }}"
       casino_ldap_users_dn: "ou=people,dc=subproject,dc=fi"
       casino_ldap_username_attribute: cn
+```
 
 ## Parameters
 
