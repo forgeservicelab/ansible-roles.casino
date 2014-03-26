@@ -1,0 +1,21 @@
+production:
+  frontend:
+    sso_name: 'CASino'
+    footer_text: 'Powered by <a href="http://rbcas.com/">CASino</a>'
+  authenticators:
+
+########################################
+# LDAP
+########################################
+    my_company_ldap:
+      authenticator: 'LDAP'
+      options:
+        host: '{{ casino_ldap_host }}'
+        port: {{ casino_ldap_port }}
+        base: '{{ casino_ldap_users_dn }}'
+        username_attribute: '{{ casino_ldap_username_attribute }}'
+        encryption: 'simple_tls'
+        extra_attributes:
+          email: 'mail'
+          fullname: 'displayname'
+

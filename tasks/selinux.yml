@@ -1,0 +1,26 @@
+---
+- name: switching selinux to permissive mode to record passenger attempts
+  selinux:
+    policy: targeted
+    state: permissive
+
+- name: rotating selinux audit log
+  command: service auditd rotate
+
+- name: restarting httpd
+  command: service httpd restart
+  ignore_errors: True
+
+- name: test
+  shell: chdir=/tmp pwd
+
+- name: compiling rules from recorded audit log
+  shell: chdir=/tmp audit2allow -i /var/log/audit/audit.log -M passenger_addon
+
+- name: loading passenger selinux rules
+  command: semodule -i /tmp/passenger_addon.pp
+
+- name: switching selinux back to enforcing mode
+  selinux:
+    policy: targeted
+    state: enforcing
