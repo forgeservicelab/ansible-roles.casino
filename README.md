@@ -29,4 +29,10 @@ The roles will install clone of current master of the CASino app from https://gi
 The role will install passenger gem and compile passenger module for apache. It will then restart apache with the module. It will do one apache-passenger start to record selinux audit, which is then used to create a module with policies allowing passenger run. It's a bit messy.
 
 
+## Logo
+To generate own logo, you can run
+
+```
+$ convert -background transparent -fill red -size 128x128  label:"Your\nSSO" files/logo.png
+```
 
