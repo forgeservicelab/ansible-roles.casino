@@ -14,6 +14,8 @@ The roles will install clone of current master of the CASino app from https://gi
       casino_ldap_port: "{{ ldaps_port }}"
       casino_ldap_users_dn: "ou=people,dc=subproject,dc=fi"
       casino_ldap_username_attribute: cn
+      casino_ldap_binder_dn: cn=binder,ou=people,dc=subproject,dc=fi
+      casino_ldap_binder_password: {{ binder_password }}
 ```
 
 ## Parameters
@@ -23,6 +25,8 @@ The roles will install clone of current master of the CASino app from https://gi
 - casino\_ldap\_port: on which port is LDAP server listening
 - casino\_ldap\_users\_dn: top of the tree with user entries
 - casino\_ldap\_username\_attribute: name of the attribute for usernames
+- casino\_ldap\_binder\_dn: DN of account under which to bind to LDAP.  Anonymous bind is not supported
+- casino\_ldap\_binder\_password: password for binding account
 
 ## Notes
 
