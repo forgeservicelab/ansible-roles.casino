@@ -11,7 +11,7 @@
     - apr-util-devel
 
 - git:
-    repo: https://github.com/rbCAS/CASinoApp.git
+    repo: "{{ casino_repo }}"
     dest: "{{ casino_dir }}"
     depth: 1
 
@@ -26,16 +26,6 @@
 - shell: chdir="{{ casino_dir }}" creates="{{ casino_dir }}/db/production.sqlite3" ./script/install sqlite
 
 - shell: chdir="{{ casino_dir }}" bundle exec whenever --update-crontab CASino
-
-# you can generate simple logo as:
-# $ convert -background transparent -fill red -size 128x128  label:"t0mk\nSSO" files/logo.png
-- copy:
-    src: logo.png
-    dest: "{{ casino_dir }}/app/assets/images/logo.png"
-
-- copy:
-    src: casino_and_overrides.scss
-    dest: "{{ casino_dir }}/app/assets/stylesheets/casino_and_overrides.scss"
 
 - name: compiling assets
   shell: chdir="{{ casino_dir }}" bundle exec rake assets:precompile
