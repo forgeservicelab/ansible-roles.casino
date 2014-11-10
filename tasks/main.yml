@@ -26,9 +26,13 @@
 - shell: chdir="{{ casino_dir }}" creates="{{ casino_dir }}/db/production.sqlite3" ./script/install sqlite
 
 - shell: chdir="{{ casino_dir }}" bundle exec whenever --update-crontab CASino
+  environment:
+    RAILS_ENV: production
 
 - name: compiling assets
   shell: chdir="{{ casino_dir }}" bundle exec rake assets:precompile
+  environment:
+    RAILS_ENV: production
 
 - name: get passenger dir
   shell: passenger-install-apache2-module --snippet | grep PassengerRoot | cut -d ' ' -f 4
@@ -45,6 +49,8 @@
 - copy:
     src: ssl.conf
     dest: /etc/httpd/conf.d/ssl.conf
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '6'
+
 
 - template:
     src: casino.vhost.conf
