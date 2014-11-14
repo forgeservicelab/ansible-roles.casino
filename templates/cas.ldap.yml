@@ -13,5 +13,5 @@
         admin_password: {{ casino_ldap_binder_password }}
         extra_attributes:
           email: 'mail'
-          fullname: 'displayname'
+          fullname: 'displayName'
 
