@@ -13,6 +13,7 @@
 - git:
     repo: "{{ casino_repo }}"
     dest: "{{ casino_dir }}"
+    version: "{{ casino_version }}"
     depth: 1
 
 
@@ -40,8 +41,16 @@
   shell: passenger-install-apache2-module --snippet | grep PassengerRoot | cut -d ' ' -f 4
   register: passenger_dir
 
+# the passenger conf must be away before the eventual compiling
+- file:
+    path: /etc/httpd/conf.d/passenger.conf
+    state: absent
+
+
 # if you kill ansible-playbook during passenger compilation, you might want to
-# rm -rf /usr/local/ruby-1.9.3-p484/lib/ruby/gems/1.9.1/gems/passenger-4.0.53/buildout /etc/httpd/conf.d/passenger.conf
+#
+# rm -rf /usr/local/ruby-1.9.3-p484/lib/ruby/gems/1.9.1/gems/passenger-4.0.53/buildout /etc/httpd/conf.d/passenger.conf /tmp/passenger_addon.*
+# semodule -r passenger_addon
 #
 # or rm -rf {{ passenger_dir.stdout }}/buildout/
 #
@@ -76,10 +85,6 @@
     dest: /etc/httpd/conf.d/casino.vhost.conf
   notify: restart httpd
 
-- shell: "semodule -l | grep -q passenger_addon"
-  register: passenger_addon_loaded
-  ignore_errors: True
-
 - template:
     src: cas.ldap.yml
     dest: /tmp/cas.ldap.yml
@@ -94,6 +99,3 @@
     recurse: yes
   notify: restart httpd
 
-- include: selinux.yml
-  when: passenger_addon_loaded|failed
-  notify: restart httpd
