@@ -11,6 +11,16 @@
   command: service httpd restart
   ignore_errors: True
 
+- name: Curl get for CASino
+  shell: "curl -L -k https://{{ansible_fqdn}}"
+  args:
+    chdir: /tmp
+
+- name: Curl get for phpldapadmin
+  shell: "curl -L -k https://{{ansible_fqdn}}:8443/phpldapadmin"
+  args:
+    chdir: /tmp
+
 - name: test
   shell: chdir=/tmp pwd
 
