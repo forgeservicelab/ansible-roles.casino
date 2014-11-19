@@ -32,7 +32,7 @@ The roles will install clone of current master of the CASino app from https://gi
 
 ## Notes
 
-The role will install passenger gem and compile passenger module for apache. It will then restart apache with the module. It will do one apache-passenger start to record selinux audit, which is then used to create a module with policies allowing passenger run. It's a bit messy.
+The role will install passenger gem and compile passenger module for apache. It will then restart apache with the module. The playbook disables selinux, it's too much of a bother to deal with. If you manage to get a set of selinux rules (the .te file), put it in please.
 
 
 ## Logo
