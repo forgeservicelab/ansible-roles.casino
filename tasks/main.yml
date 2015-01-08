@@ -14,7 +14,6 @@
     repo: "{{ casino_repo }}"
     dest: "{{ casino_dir }}"
     version: "{{ casino_version }}"
-    depth: 1
 
 
 # http://casino.rbcas.com/docs/installation/
