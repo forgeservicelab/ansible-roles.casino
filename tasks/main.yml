@@ -15,7 +15,6 @@
     dest: "{{ casino_dir }}"
     version: "{{ casino_version }}"
 
-
 # http://casino.rbcas.com/docs/installation/
 # ansible can't install gems for some reason
 - shell: chdir="{{ casino_dir}}" gem install "{{ item }}"
