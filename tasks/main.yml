@@ -77,6 +77,15 @@
     dest: /etc/httpd/conf.d/ssl.conf
   when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '6'
 
+- lineinfile:
+    backup: yes
+    dest: "{{ '/etc/httpd/conf/httpd.conf' if ansible_os_family == 'RedHat' else '/etc/apache2/ports.conf' }}"
+    insertafter: EOF
+    line: "Listen {{ item }}"
+  with_items:
+    - 80
+    - "{{ casino_port }}"
+  notify: restart httpd
 
 - template:
     src: casino.vhost.conf
