@@ -83,8 +83,8 @@
     insertafter: EOF
     line: "Listen {{ item }}"
   with_items:
-    - 80
-    - "{{ casino_port }}"
+    - 0.0.0.0:80
+    - "0.0.0.0:{{ casino_port }}"
   notify: restart httpd
 
 - template:
@@ -105,4 +105,3 @@
     group: apache
     recurse: yes
   notify: restart httpd
-
