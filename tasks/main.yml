@@ -24,6 +24,20 @@
 
 - shell: chdir="{{ casino_dir }}" creates="{{ casino_dir }}/db/production.sqlite3" ./script/install sqlite
 
+- lineinfile:
+    dest: "{{ casino_dir }}/db/production.sqlite3"
+    regexp: "^(\s+timeout:).*"
+    backrefs: yes
+    line: "\1 120000"
+    backup: yes
+
+- lineinfile:
+    dest: "{{ casino_dir }}/vendor/bundle/ruby/1.9.1/gems/activerecord-3.2.17/lib/active_record/connection_adapters/sqlite_adapter.rb"
+    regexp: "(.*@connection\.transaction)(\s.*)"
+    backrefs: yes
+    line: "\1(:immediate)\2"
+    backup: yes
+
 - shell: chdir="{{ casino_dir }}" bundle exec whenever --update-crontab CASino
   environment:
     RAILS_ENV: production
