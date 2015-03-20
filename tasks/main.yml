@@ -111,7 +111,7 @@
     dest: /tmp/cas.ldap.yml
 
 - name: configure log rotation for casino
-  copy: src=casino dest=/etc/logrotate.d/ owner=root group=root mode=0644
+  copy: src=casino.logrotate dest=/etc/logrotate.d/casino owner=root group=root mode=0644
 
 - shell: cat {{ casino_dir }}/config/cas.yml.example /tmp/cas.ldap.yml > {{ casino_dir }}/config/cas.yml
   notify: restart httpd
