@@ -1,0 +1,9 @@
+/var/www/casino/log/production.log {
+    daily
+    rotate 7
+    missingok
+    notifempty
+    copytruncate
+    compress
+    delaycompress
+}
