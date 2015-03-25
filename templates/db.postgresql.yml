@@ -1,0 +1,11 @@
+########################################
+# LDAP
+########################################
+production:
+  adapter: postgresql
+  encoding: utf8
+  pool: 15
+  database: {{ casino_db_name }}
+  host: {{ casino_db_host }}
+  username: {{ casino_db_username }}
+  password: {{ casino_db_password }}

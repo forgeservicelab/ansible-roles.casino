@@ -4,7 +4,7 @@
   with_items:
     - mod_ssl
     - git
-    - sqlite-devel
+    - postgresql-devel
     - curl-devel
     - httpd-devel
     - apr-devel
@@ -15,28 +15,47 @@
     dest: "{{ casino_dir }}"
     version: "{{ casino_version }}"
 
-# http://casino.rbcas.com/docs/installation/
-# ansible can't install gems for some reason
-- shell: chdir="{{ casino_dir}}" gem install "{{ item }}"
+- gem:
+    name: "{{ item }}"
+    user_install: no
   with_items:
     - passenger
     - bundler
 
-- shell: chdir="{{ casino_dir }}" creates="{{ casino_dir }}/db/production.sqlite3" ./script/install sqlite
+- shell: bundle install --deployment --without development test mysql sqlite
+  args:
+    chdir: "{{ casino_dir }}"
+    creates: "{{ casino_dir }}/vendor/bundle"
+  environment:
+    RAILS_ENV: production
 
-- lineinfile:
-    dest: "{{ casino_dir }}/db/production.sqlite3"
-    regexp: "^(\s+timeout:).*"
-    backrefs: yes
-    line: "\1 120000"
-    backup: yes
+- stat:
+    path: "{{ casino_dir }}/config/database.yml"
+  register: dbconf
 
-- lineinfile:
-    dest: "{{ casino_dir }}/vendor/bundle/ruby/1.9.1/gems/activerecord-3.2.17/lib/active_record/connection_adapters/sqlite_adapter.rb"
-    regexp: "(.*@connection\.transaction)(\s.*)"
-    backrefs: yes
-    line: "\1(:immediate)\2"
-    backup: yes
+- name: Upload database settings
+  template:
+    src: db.postgresql.yml
+    dest: "{{ casino_dir }}/config/database.yml"
+  register: database
+
+- shell: bundle exec rake db:schema:load
+  args:
+    chdir: "{{ casino_dir }}"
+  environment:
+    RAILS_ENV: production
+  when: not dbconf.stat.exists
+
+- shell: bundle exec rake db:migrate
+  args:
+    chdir: "{{ casino_dir }}"
+  environment:
+    SCOPE: casino
+  when: database.changed and dbconf.stat.exists
+
+- command: cp cas.yml.example cas.yml
+  args:
+    chdir: "{{ casino_dir }}/config"
 
 - shell: chdir="{{ casino_dir }}" bundle exec whenever --update-crontab CASino
   environment:
