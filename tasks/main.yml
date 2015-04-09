@@ -25,7 +25,6 @@
 - shell: bundle install --deployment --without development test mysql sqlite
   args:
     chdir: "{{ casino_dir }}"
-    creates: "{{ casino_dir }}/vendor/bundle"
   environment:
     RAILS_ENV: production
 
@@ -51,6 +50,7 @@
     chdir: "{{ casino_dir }}"
   environment:
     SCOPE: casino
+    RAILS_ENV: production
   when: database.changed and dbconf.stat.exists
 
 - command: cp cas.yml.example cas.yml
