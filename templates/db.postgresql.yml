@@ -1,5 +1,5 @@
 ########################################
-# LDAP
+# PostgreSQL Database
 ########################################
 production:
   adapter: postgresql
