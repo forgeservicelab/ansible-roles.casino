@@ -2,3 +2,4 @@ casino_repo: https://github.com/rbCAS/CASinoApp.git
 casino_dir: /var/www/casino
 casino_port: 443
 casino_version: 509debedcecf0bd3cd0f8883699e6f025b65b91a
+casino_server_aliases: []
